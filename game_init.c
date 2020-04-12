@@ -11,27 +11,53 @@
 #include "game_init.h"
 
 void initialize_players(player players[PLAYERS_NUM]){
-
-    // implement here the functionality to initialize the players
-
+    char choice='\0';
+    for(int i=0;i<PLAYERS_NUM;i++){
+        printf("Enter player %d name:",i+1);
+        scanf("%s",players[i].player_name);
+        if(choice == '1'){
+            printf("Since %s is RED, %s is GREEN.\n\n",players[i-1].player_name,players[i].player_name);
+            players[i].player_color = GREEN;
+        }else if(choice == '2'){
+            printf("Since %s is GREEN, %s is RED.\n\n",players[i-1].player_name,players[i].player_name);
+            players[i].player_color = RED;
+        }else{
+            while(choice!='1' && choice!='2'){
+                printf("(1)RED or (2)GREEN\nPlease choose your colour:");
+                scanf("\n%c",&choice);
+                switch (choice){
+                    case '1':
+                        players[i].player_color = RED;
+                        printf("%s is RED.\n\n",players[i].player_name);
+                        break;
+                    case '2':
+                        players[i].player_color = GREEN;
+                        printf("%s is GREEN.\n\n",players[i].player_name);
+                        break;
+                    default:
+                        printf("Please only enter 1 or 2.\n\n");
+                }
+            }
+        }
+    }
 }
 
 //Set Invalid Squares (where it is not possible to place stacks)
-set_invalid(square * s){
+void set_invalid(square * s){
 s->type = INVALID;
 s->stack = NULL;
 s->num_pieces = 0;
 }
 
 //Set Empty Squares (with no pieces/stacks)
-set_empty(square * s){
+void set_empty(square * s){
 s->type = VALID;
 s->stack = NULL;
 s->num_pieces = 0;
 }
 
 //Set squares  with a GREEN piece
-set_green(square * s){
+void set_green(square * s){
 s->type = VALID;
 s->stack = (piece *) malloc (sizeof(piece));
 s->stack->p_color = GREEN;
@@ -40,7 +66,7 @@ s->num_pieces = 1;
 }
 
 //Set squares with a RED piece
-set_red(square * s){
+void set_red(square * s){
 s->type = VALID;
 s->stack = (piece *) malloc (sizeof(piece));
 s->stack->p_color = RED;
