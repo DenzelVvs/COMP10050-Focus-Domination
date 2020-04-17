@@ -6,6 +6,14 @@
 
 #IncludeRegexTransform: 
 
+C:/Users/Denze/COMP10050/game_init.c
+stdio.h
+-
+stdlib.h
+-
+game_init.h
+C:/Users/Denze/COMP10050/game_init.h
+
 C:/Users/Denze/COMP10050/game_init.h
 
 C:/Users/Denze/COMP10050/input_output.c
@@ -13,10 +21,20 @@ stdio.h
 -
 stdlib.h
 -
+stdbool.h
+-
 input_output.h
 C:/Users/Denze/COMP10050/input_output.h
 
 C:/Users/Denze/COMP10050/input_output.h
 game_init.h
 C:/Users/Denze/COMP10050/game_init.h
+
+C:/Users/Denze/COMP10050/main.c
+stdio.h
+-
+stdlib.h
+-
+input_output.h
+C:/Users/Denze/COMP10050/input_output.h
 
