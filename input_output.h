@@ -17,4 +17,4 @@ void print_board(square board[BOARD_SIZE][BOARD_SIZE]);
 
 void make_move(player players[PLAYERS_NUM],square board [BOARD_SIZE][BOARD_SIZE]);
 
-piece* push(piece *p1,piece *p2);
+piece* push(piece *p1,piece *top);

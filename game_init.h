@@ -67,7 +67,6 @@ typedef struct square {
 
 //Function to create the players
 void initialize_players(player players[PLAYERS_NUM]);
-
 void set_invalid(square * s);
 void set_empty(square * s);
 void set_green(square * s);
