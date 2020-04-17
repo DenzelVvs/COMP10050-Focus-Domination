@@ -11,26 +11,26 @@
 #include "game_init.h"
 
 void initialize_players(player players[PLAYERS_NUM]){
-    char choice='\0';
+    int choice=0;
     for(int i=0;i<PLAYERS_NUM;i++){
         printf("Enter player %d name:",i+1);
         scanf("%s",players[i].player_name);
-        if(choice == '1'){
+        if(choice == 1){
             printf("Since %s is RED, %s is GREEN.\n\n",players[i-1].player_name,players[i].player_name);
             players[i].player_color = GREEN;
-        }else if(choice == '2'){
+        }else if(choice == 2){
             printf("Since %s is GREEN, %s is RED.\n\n",players[i-1].player_name,players[i].player_name);
             players[i].player_color = RED;
         }else{
-            while(choice!='1' && choice!='2'){
+            while(choice!=1 && choice!=2){
                 printf("(1)RED or (2)GREEN\nPlease choose your colour:");
-                scanf("\n%c",&choice);
+                scanf("\n%d",&choice);
                 switch (choice){
-                    case '1':
+                    case 1:
                         players[i].player_color = RED;
                         printf("%s is RED.\n\n",players[i].player_name);
                         break;
-                    case '2':
+                    case 2:
                         players[i].player_color = GREEN;
                         printf("%s is GREEN.\n\n",players[i].player_name);
                         break;

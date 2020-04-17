@@ -15,5 +15,9 @@ int main() {
     initialize_board(board);
 
     print_board(board);
+
+    make_move(players,board);
+
+    print_board(board);
     return 0;
 }

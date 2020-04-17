@@ -11,6 +11,8 @@ C:/Users/Denze/COMP10050/game_init.h
 C:/Users/Denze/COMP10050/input_output.c
 stdio.h
 -
+stdlib.h
+-
 input_output.h
 C:/Users/Denze/COMP10050/input_output.h
 
