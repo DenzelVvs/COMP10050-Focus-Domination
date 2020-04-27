@@ -97,8 +97,23 @@ void make_move(player players[PLAYERS_NUM],square board [BOARD_SIZE][BOARD_SIZE]
         board[x2][y2].stack = push(board[x1][y1].stack,board[x2][y2].stack,board[x1][y1].num_pieces);
         set_empty(&board[x1][y1]);
 
+        if(board[x2][y2].num_pieces > 5){
+            players[i] = count_captured(board[x2][y2].stack,players[i]);
+            board[x2][y2].stack = remove_piece(board[x2][y2].stack);
+            board[x2][y2].num_pieces = 5;
+        }
+
         print_board(board);
 
+        if(i==0){
+            printf("%s's Reserve Pieces: %u\n",players[i+1].player_name,players[i+1].reserve);
+            printf("%s's Captured Pieces: %u\n",players[i+1].player_name,players[i+1].captured);
+        }else if(i==1){
+            printf("%s's Reserve Pieces: %u\n",players[i-1].player_name,players[i-1].reserve);
+            printf("%s's Captured Pieces: %u\n",players[i-1].player_name,players[i-1].captured);
+        }
+
+        printf("\n");
         printList(board[x2][y2].stack);
         printf("\n");
 
@@ -161,6 +176,54 @@ piece* push(piece *p1,piece *top, int p1_num_pieces)
     }
 
     return newTop;
+}
+
+piece* remove_piece(piece *top)
+{
+    int i=0;
+    piece *previousPtr = NULL;
+    piece *currentPtr = top;
+
+    while ( i<5 ) {
+        previousPtr = currentPtr;
+        currentPtr = currentPtr->next;
+        i++;
+    }
+
+    if(previousPtr!=NULL){
+        previousPtr->next = NULL;
+    }
+
+    while(currentPtr !=NULL){
+        previousPtr = currentPtr;
+        currentPtr = currentPtr->next;
+        free(previousPtr);
+    }
+
+    return top;
+}
+
+player count_captured(piece *top,player Player)
+{
+    int i=0;
+    piece *currentPtr = top;
+
+    while ( i<5 ) {
+        currentPtr = currentPtr->next;
+        i++;
+    }
+
+    while(currentPtr !=NULL){
+        if(currentPtr->p_color == Player.player_color){
+            Player.reserve++;
+        }else{
+            Player.captured++;
+        }
+
+        currentPtr = currentPtr->next;
+    }
+
+    return Player;
 }
 
 void printList( piece *top )

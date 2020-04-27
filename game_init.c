@@ -39,6 +39,9 @@ void initialize_players(player players[PLAYERS_NUM]){
                 }
             }
         }
+
+        players[i].reserve = 0;
+        players[i].captured = 0;
     }
 }
 

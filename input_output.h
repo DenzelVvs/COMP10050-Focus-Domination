@@ -19,4 +19,7 @@ void make_move(player players[PLAYERS_NUM],square board [BOARD_SIZE][BOARD_SIZE]
 
 piece* push(piece *p1,piece *top, int p1_num_pieces);
 
+piece* remove_piece(piece *top);
+player count_captured(piece *top,player Player);
+
 void printList( piece *top );
