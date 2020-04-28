@@ -15,7 +15,11 @@
 //Function to print the board
 void print_board(square board[BOARD_SIZE][BOARD_SIZE]);
 
-void make_move(player players[PLAYERS_NUM],square board [BOARD_SIZE][BOARD_SIZE]);
+player play_game(player players[PLAYERS_NUM],square board [BOARD_SIZE][BOARD_SIZE]);
+
+void make_move(player Player,square board[BOARD_SIZE][BOARD_SIZE]);
+
+void place_reserve(player Player,square board[BOARD_SIZE][BOARD_SIZE]);
 
 piece* push(piece *p1,piece *top, int p1_num_pieces);
 

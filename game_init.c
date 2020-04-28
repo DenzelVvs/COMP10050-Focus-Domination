@@ -24,7 +24,7 @@ void initialize_players(player players[PLAYERS_NUM]){
         }else{
             while(choice!=1 && choice!=2){
                 printf("(1)RED or (2)GREEN\nPlease choose your colour:");
-                scanf("\n%d",&choice);
+                scanf("%d",&choice);
                 switch (choice){
                     case 1:
                         players[i].player_color = RED;
@@ -42,6 +42,7 @@ void initialize_players(player players[PLAYERS_NUM]){
 
         players[i].reserve = 0;
         players[i].captured = 0;
+        players[i].board_pieces = 18;
     }
 }
 

@@ -32,6 +32,7 @@ typedef struct player{
     char player_name[15];
     unsigned int captured;
     unsigned int reserve;
+    unsigned int board_pieces;
     /*
      * A player should also be characterized by:
      * name,
@@ -74,8 +75,3 @@ void set_red(square * s);
 
 //Function to create the board
 void initialize_board(square board[BOARD_SIZE][BOARD_SIZE]);
-
-
-
-
-

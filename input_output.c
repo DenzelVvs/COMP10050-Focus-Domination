@@ -11,6 +11,8 @@
 #include <stdbool.h>
 #include "input_output.h"
 
+int X1=0,Y1=0,X2=0,Y2=0;
+
 /* FUnction to print the board:
  * Invalid Squares are printed as | - |
  * Valid empty squares are printed as |   |
@@ -43,64 +45,48 @@ void print_board(square board[BOARD_SIZE][BOARD_SIZE]){
     printf("\n");
 }
 
-void make_move(player players[PLAYERS_NUM],square board [BOARD_SIZE][BOARD_SIZE])
+player play_game(player players[PLAYERS_NUM],square board [BOARD_SIZE][BOARD_SIZE])
 {
-    int i=0,x1=0,y1=0,x2=0,y2=0;
-    bool noMove=false,sameColour1=false, sameColour2=true;
+    int i=0,choice=0;
+    bool noMove=false;
 
     while(!noMove){
         if(i==2){
             i-=2;
         }
-        while(!sameColour1){
-            printf("\n%s's turn to move.",players[i].player_name);
-            printf("\nEnter the coordinates of the piece to move:\nx1:");
-            scanf("%d",&x1);
-            printf("y1:");
-            scanf("%d",&y1);
 
-            if(x1<1 || x1>8 || y1<1 || y1>8){
-                printf("Invalid coordinates. Please try again.\n");
-                printf("Valid coordinates for x: 1-8\nValid coordinates for y: 1-8\n");
-            }else if(board[x1-1][y1-1].stack == NULL){
-                printf("You have not selected a piece.\nPlease try again.\n");
-            }else if(board[x1-1][y1-1].stack->p_color!=players[i].player_color ){
-                printf("You did not choose a piece that matches your colour.\n");
-                printf("Please try again.\n");
-            }else if(board[x1-1][y1-1].stack->p_color==players[i].player_color){
-                sameColour1=true;
+        if(players[i].reserve > 0){
+            printf("(1)Make a move or (2)Use a reserve piece?\n");
+
+            while(choice!=1 && choice!=2){
+                scanf("%d",&choice);
+                if(choice!=1 && choice!=2){
+                    printf("Please only enter either 1 or 2.\n");
+                }
             }
 
-        }
-
-        while(sameColour2){
-            printf("\nEnter the coordinates of the square to be captured:\nx2:");
-            scanf("%d",&x2);
-            printf("y2:");
-            scanf("%d",&y2);
-
-            if(x2<1 || x2>8 || y2<1 || y2>8){
-                printf("Invalid coordinates. Please try again.\n");
-                printf("Valid coordinates for x: 1-8\nValid coordinates for y: 1-8\n");
-            }else if(board[x2-1][y2-1].type == INVALID){
-                printf("Invalid square. Please choose a valid square.\n");
-            }else if(board[x1-1][y1-1].num_pieces < abs(x1-x2) || board[x1-1][y1-1].num_pieces < abs(y1-y2)){
-                printf("Invalid move. Displacement of a piece should be less than/equal to the number of pieces in the stack.\n");
-            }else if(board[x2-1][y2-1].stack==NULL || board[x2-1][y2-1].stack->p_color != players[i].player_color){
-                sameColour2=false;
-            }else if(board[x2-1][y2-1].stack->p_color == players[i].player_color){
-                printf("You can't capture a piece that matches your colour.\nPlease try again.\n");
+            if(choice == 1){
+                make_move(players[i],board);
+            }else if(choice == 2){
+                place_reserve(players[i],board);
+                players[i].reserve--;
+                players[i].board_pieces++;
             }
+
+        }else{
+            make_move(players[i],board);
         }
 
-        board[--x2][--y2].num_pieces += board[--x1][--y1].num_pieces;
-        board[x2][y2].stack = push(board[x1][y1].stack,board[x2][y2].stack,board[x1][y1].num_pieces);
-        set_empty(&board[x1][y1]);
+        if(i==0){
+            players[i+1].board_pieces--;
+        }else if(i==1){
+            players[i-1].board_pieces--;
+        }
 
-        if(board[x2][y2].num_pieces > 5){
-            players[i] = count_captured(board[x2][y2].stack,players[i]);
-            board[x2][y2].stack = remove_piece(board[x2][y2].stack);
-            board[x2][y2].num_pieces = 5;
+        if(board[X2][Y2].num_pieces > 5){
+            players[i] = count_captured(board[X2][Y2].stack,players[i]);
+            board[X2][Y2].stack = remove_piece(board[X2][Y2].stack);
+            board[X2][Y2].num_pieces = 5;
         }
 
         print_board(board);
@@ -114,19 +100,126 @@ void make_move(player players[PLAYERS_NUM],square board [BOARD_SIZE][BOARD_SIZE]
         }
 
         printf("\n");
-        printList(board[x2][y2].stack);
-        printf("\n");
-
-        if(players[i].captured == 18){
-            noMove = true;
+        printList(board[X2][Y2].stack);
+        if(i==0){
+            printf("%s %d\n",players[i].player_name,players[i].board_pieces);
+            printf("%s %d\n",players[i+1].player_name,players[i+1].board_pieces);
+        }else if(i==1){
+            printf("%s %d\n",players[i-1].player_name,players[i-1].board_pieces);
+            printf("%s %d\n",players[i].player_name,players[i].board_pieces);
         }
 
+
+        if(i==0){
+            if(players[i+1].board_pieces == 0){
+                noMove = true;
+                printf("\nNo moves left for %s.",players[i+1].player_name);
+            }
+        }else if(i==1){
+            if(players[i-1].board_pieces == 0){
+                noMove = true;
+                printf("\nNo moves left for %s.\n\n",players[i-1].player_name);
+            }
+        }
         i++;
-        sameColour1=false;
-        sameColour2=true;
+        choice = 0;
     }
 
 
+    if(i==0){
+        return players[i+1];
+    }else if(i==1){
+        return players[i-1];
+    }
+}
+
+void make_move(player Player,square board[BOARD_SIZE][BOARD_SIZE])
+{
+    bool sameColour1=false, sameColour2=true;
+
+    while(!sameColour1){
+        printf("\n%s's turn to move.",Player.player_name);
+        printf("\nEnter the coordinates of the piece to move:\nX1:");
+        scanf("%d",&X1);
+        printf("Y1:");
+        scanf("%d",&Y1);
+
+        if(X1<1 || X1>8 || Y1<1 || Y1>8){
+            printf("Invalid coordinates. Please try again.\n");
+            printf("Valid coordinates for x: 1-8\nValid coordinates for y: 1-8\n");
+        }else if(board[X1-1][Y1-1].stack == NULL){
+            printf("You have not selected a piece.\nPlease try again.\n");
+        }else if(board[X1-1][Y1-1].stack->p_color!=Player.player_color ){
+            printf("You did not choose a piece that matches your colour.\n");
+            printf("Please try again.\n");
+        }else if(board[X1-1][Y1-1].stack->p_color==Player.player_color){
+            sameColour1=true;
+        }
+    }
+
+    while(sameColour2){
+        printf("\nEnter the coordinates of the square to be captured:\nX2:");
+        scanf("%d",&X2);
+        printf("Y2:");
+        scanf("%d",&Y2);
+
+        if(X2<1 || X2>8 || Y2<1 || Y2>8){
+            printf("Invalid coordinates. Please try again.\n");
+            printf("Valid coordinates for x: 1-8\nValid coordinates for y: 1-8\n");
+        }else if(board[X2-1][Y2-1].type == INVALID){
+            printf("Invalid square. Please choose a valid square.\n");
+        }else if(board[X1-1][Y1-1].num_pieces < abs(X1-X2) || board[X1-1][Y1-1].num_pieces < abs(Y1-Y2)){
+            printf("Invalid move. Displacement of a piece should be less than/equal to the number of pieces in the stack.\n");
+        }else if(board[X2-1][Y2-1].stack==NULL || board[X2-1][Y2-1].stack->p_color != Player.player_color){
+            sameColour2=false;
+        }else if(board[X2-1][Y2-1].stack->p_color == Player.player_color){
+            printf("You can't capture a piece that matches your colour.\nPlease try again.\n");
+        }
+    }
+
+    board[--X2][--Y2].num_pieces += board[--X1][--Y1].num_pieces;
+    board[X2][Y2].stack = push(board[X1][Y1].stack,board[X2][Y2].stack,board[X1][Y1].num_pieces);
+    set_empty(&board[X1][Y1]);
+}
+
+void place_reserve(player Player,square board[BOARD_SIZE][BOARD_SIZE])
+{
+    bool sameColour2=true;
+    piece *newPiece;
+
+    newPiece = malloc(sizeof(piece));
+
+    if(newPiece == NULL){
+        printf("Memory not allocated.\n");
+        exit(1);
+    }else if(Player.player_color == RED){
+        newPiece->p_color = RED;
+    }else{
+        newPiece->p_color = GREEN;
+    }
+
+    while(sameColour2){
+        printf("\nEnter the coordinates of the square to be captured:\nX2:");
+        scanf("%d",&X2);
+        printf("Y2:");
+        scanf("%d",&Y2);
+
+        if(X2<1 || X2>8 || Y2<1 || Y2>8){
+            printf("Invalid coordinates. Please try again.\n");
+            printf("Valid coordinates for x: 1-8\nValid coordinates for y: 1-8\n");
+        }else if(board[X2-1][Y2-1].type == INVALID){
+            printf("Invalid square. Please choose a valid square.\n");
+        }else if(board[X2-1][Y2-1].stack==NULL || board[X2-1][Y2-1].stack->p_color != Player.player_color){
+            sameColour2=false;
+        }else if(board[X2-1][Y2-1].stack->p_color == Player.player_color){
+            printf("You can't capture a piece that matches your colour.\nPlease try again.\n");
+        }
+    }
+
+    --X2;
+    --Y2;
+    board[X2][Y2].stack = push(newPiece,board[X2][Y2].stack,1);
+    board[X2][Y2].num_pieces++;
 
 }
 
