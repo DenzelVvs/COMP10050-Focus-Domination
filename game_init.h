@@ -1,5 +1,5 @@
 //
-// Created by Lili on 24/03/2020.
+// Created by Denzel on 12/04/2020.
 //
 
 #ifndef FOCUS_GAME_INIT_H
@@ -30,16 +30,9 @@ typedef struct player{
     //the color associated with the player
     color player_color;
     char player_name[15];
-    unsigned int captured;
-    unsigned int reserve;
-    unsigned int board_pieces;
-    /*
-     * A player should also be characterized by:
-     * name,
-     * number of adversary's pieces captured,
-     * number of own pieces kept.
-     *
-    */
+    unsigned int captured;  //number of enemy pieces captured
+    unsigned int reserve;   //number of own pieces not on board
+    unsigned int board_pieces;  //number of own pieces on board
 }player;
 
 // A piece
@@ -68,6 +61,8 @@ typedef struct square {
 
 //Function to create the players
 void initialize_players(player players[PLAYERS_NUM]);
+
+//functions to initialize squares in the board
 void set_invalid(square * s);
 void set_empty(square * s);
 void set_green(square * s);

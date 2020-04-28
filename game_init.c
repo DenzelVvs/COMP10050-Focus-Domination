@@ -1,9 +1,5 @@
 //
-// Created by Lili on 26/03/2020.
-//
-
-//
-// Created by Lili on 24/03/2020.
+// Created by Denzel on 12/04/2020.
 //
 
 #include <stdio.h>
@@ -13,33 +9,35 @@
 void initialize_players(player players[PLAYERS_NUM]){
     int choice=0;
     for(int i=0;i<PLAYERS_NUM;i++){
-        printf("Enter player %d name:",i+1);
+        printf("Enter player %d name:",i+1);    //prompts player to enter name
         scanf("%s",players[i].player_name);
-        if(choice == 1){
+        if(choice == 1){    //assigns GREEN to second player
             printf("Since %s is RED, %s is GREEN.\n\n",players[i-1].player_name,players[i].player_name);
             players[i].player_color = GREEN;
-        }else if(choice == 2){
+        }else if(choice == 2){      //assigns RED to second player
             printf("Since %s is GREEN, %s is RED.\n\n",players[i-1].player_name,players[i].player_name);
             players[i].player_color = RED;
         }else{
+            //this loop prompts first player to choose a colour
             while(choice!=1 && choice!=2){
                 printf("(1)RED or (2)GREEN\nPlease choose your colour:");
                 scanf("%d",&choice);
                 switch (choice){
-                    case 1:
+                    case 1:     //assigns RED to first player
                         players[i].player_color = RED;
                         printf("%s is RED.\n\n",players[i].player_name);
                         break;
-                    case 2:
+                    case 2:     //assigns GREEN to first player
                         players[i].player_color = GREEN;
                         printf("%s is GREEN.\n\n",players[i].player_name);
                         break;
-                    default:
+                    default:    //this is for when the player did not choose 1 or 2
                         printf("Please only enter 1 or 2.\n\n");
                 }
             }
         }
 
+        //initializes other details about the player
         players[i].reserve = 0;
         players[i].captured = 0;
         players[i].board_pieces = 18;
@@ -104,10 +102,6 @@ void initialize_board(square board [BOARD_SIZE][BOARD_SIZE]){
                 }
             }
         }
-
-
     }
-
-
 }
 
