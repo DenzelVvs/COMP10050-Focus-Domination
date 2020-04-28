@@ -55,6 +55,7 @@ player play_game(player players[PLAYERS_NUM],square board [BOARD_SIZE][BOARD_SIZ
             i-=2;
         }
 
+        printf("\n%s's turn to move.",players[i].player_name);
         if(players[i].reserve > 0){
             printf("(1)Make a move or (2)Use a reserve piece?\n");
 
@@ -99,17 +100,6 @@ player play_game(player players[PLAYERS_NUM],square board [BOARD_SIZE][BOARD_SIZ
             printf("%s's Captured Pieces: %u\n",players[i-1].player_name,players[i-1].captured);
         }
 
-        printf("\n");
-        printList(board[X2][Y2].stack);
-        if(i==0){
-            printf("%s %d\n",players[i].player_name,players[i].board_pieces);
-            printf("%s %d\n",players[i+1].player_name,players[i+1].board_pieces);
-        }else if(i==1){
-            printf("%s %d\n",players[i-1].player_name,players[i-1].board_pieces);
-            printf("%s %d\n",players[i].player_name,players[i].board_pieces);
-        }
-
-
         if(i==0){
             if(players[i+1].board_pieces == 0){
                 noMove = true;
@@ -118,7 +108,7 @@ player play_game(player players[PLAYERS_NUM],square board [BOARD_SIZE][BOARD_SIZ
         }else if(i==1){
             if(players[i-1].board_pieces == 0){
                 noMove = true;
-                printf("\nNo moves left for %s.\n\n",players[i-1].player_name);
+                printf("\nNo moves left for %s.",players[i-1].player_name);
             }
         }
         i++;
@@ -138,7 +128,6 @@ void make_move(player Player,square board[BOARD_SIZE][BOARD_SIZE])
     bool sameColour1=false, sameColour2=true;
 
     while(!sameColour1){
-        printf("\n%s's turn to move.",Player.player_name);
         printf("\nEnter the coordinates of the piece to move:\nX1:");
         scanf("%d",&X1);
         printf("Y1:");
@@ -168,6 +157,8 @@ void make_move(player Player,square board[BOARD_SIZE][BOARD_SIZE])
             printf("Valid coordinates for x: 1-8\nValid coordinates for y: 1-8\n");
         }else if(board[X2-1][Y2-1].type == INVALID){
             printf("Invalid square. Please choose a valid square.\n");
+        }else if(abs(X1-X2)>0 && abs(Y1-Y2)>0){
+            printf("Invalid move. You cannot move a piece/stack diagonally.\n");
         }else if(board[X1-1][Y1-1].num_pieces < abs(X1-X2) || board[X1-1][Y1-1].num_pieces < abs(Y1-Y2)){
             printf("Invalid move. Displacement of a piece should be less than/equal to the number of pieces in the stack.\n");
         }else if(board[X2-1][Y2-1].stack==NULL || board[X2-1][Y2-1].stack->p_color != Player.player_color){

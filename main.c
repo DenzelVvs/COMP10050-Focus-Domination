@@ -19,9 +19,9 @@ int main() {
     Winner = play_game(players,board);
 
     if(Winner.player_color==0){
-        printf("RED wins!!!\n");
+        printf("\n\nRED wins!!!\n");
     }else if(Winner.player_color==1){
-        printf("GREEN wins!!!\n");
+        printf("\n\nGREEN wins!!!\n");
     }
 
     printf("Pieces left on board: %u\nReserve pieces: %u\nCaptured enemy pieces: %u\n\nCONGRATULATIONS %s!!!\n",
